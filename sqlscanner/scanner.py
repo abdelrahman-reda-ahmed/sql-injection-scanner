@@ -478,12 +478,20 @@ class SQLInjectionScanner:
         # Step 1: Crawl the website
         self.crawl_website()
         
-        # Step 2: Test all parameters with all attacks
-        discovered_params = self.display_discovered_parameters()
-        if not discovered_params:
+        if not self.has_crawled or not self.forms_found:
+            print("❌ No pages or forms found to test!")
             return
         
-        print("\n[*] Testing all parameters with all attack types...")
+        # Step 2: Show parameters found and ask for confirmation
+        discovered_params = self.display_discovered_parameters()
+        if not discovered_params:
+            print("❌ No parameters found to test!")
+            return
+        
+        print("\n[*] Starting automated testing with all attack types...")
+        input("Press Enter to continue or Ctrl+C to cancel...")
+        
+        # Test all parameters with all attacks
         self.test_selected_parameters([6], discovered_params)  # [6] = All attacks
 
     def show_vulnerability_report(self):
