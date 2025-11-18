@@ -7,16 +7,13 @@ from .scanner import SQLInjectionScanner
 
 def main():
     banner = """
-    ███████╗ ██████╗ ██╗         ██╗███╗   ██╗██████╗ ███████╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗
-    ██╔════╝██╔═══██╗██║         ██║████╗  ██║██╔══██╗██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
-    ███████╗██║   ██║██║         ██║██╔██╗ ██║██║  ██║█████╗  ██║        ██║   ██║██║   ██║██╔██╗ ██║
-    ╚════██║██║   ██║██║         ██║██║╚██╗██║██║  ██║██╔══╝  ██║        ██║   ██║██║   ██║██║╚██╗██║
-    ███████║╚██████╔╝███████╗    ██║██║ ╚████║██████╔╝███████╗╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
-    ╚══════╝ ╚═════╝ ╚══════╝    ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-    
-    SQL Injection Scanner v1.0.0
+╔══════════════════════════════════════════════════════════╗
+║                   SQL INJECTION SCANNER                 ║
+║                     Professional Tool v1.0.0            ║
+║         Advanced SQL Injection Vulnerability Scanner     ║
+╚══════════════════════════════════════════════════════════╝
     """
-
+    
     print(banner)
     
     parser = argparse.ArgumentParser(description='SQL Injection Scanner')
@@ -33,20 +30,16 @@ def main():
         sys.exit(1)
 
     try:
-        if args.interactive or not args.url:
-            target_url = args.url
+        # Always use interactive mode for better user experience
+        target_url = args.url
+        if not target_url and not args.interactive:
+            target_url = input("Enter target URL: ").strip()
             if not target_url:
-                target_url = input("Enter target URL: ").strip()
-                if not target_url:
-                    print("❌ No target URL provided.")
-                    sys.exit(1)
-            scanner = SQLInjectionScanner(target_url, args.delay, args.max_pages)
-            scanner.run_interactive_mode()  # ← ALWAYS GO TO INTERACTIVE MODE
-        else:
-            # If URL provided but not interactive, show quick options
-            scanner = SQLInjectionScanner(args.url, args.delay, args.max_pages)
-            print("[*] Starting quick scan with default settings...")
-            scanner.run_comprehensive_scan()
+                print("❌ No target URL provided.")
+                sys.exit(1)
+        
+        scanner = SQLInjectionScanner(target_url, args.delay, args.max_pages)
+        scanner.run_interactive_mode()  # Always show the interactive menu
                 
     except KeyboardInterrupt:
         print("\n\n⚠️  Scan interrupted by user")
